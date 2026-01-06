@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velocity EA - روبوت التداول عالي السرعة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FFD700;
+            --secondary: #1A1A1A;
+            --accent: #C0A050;
+            --light: #F5F5F5;
+            --dark: #121212;
+            --success: #2E8B57;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .top-bar {
+            background: linear-gradient(to bottom, #000000, var(--secondary));
+            padding: 15px 0;
+            text-align: center;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .top-logo-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+        }
+        
+        .logo-text h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .logo-text span {
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.9)), url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=2070');
+            background-size: cover;
+            background-position: center;
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            color: #DDD;
+        }
+        
+        .highlight {
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .pricing {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .price-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            width: 100%;
+            max-width: 900px;
+            border: 2px solid var(--primary);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .price-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.2);
+        }
+        
+        .price-card h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .price {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--light);
+            margin: 15px 0;
+        }
+        
+        .price span {
+            font-size: 1.2rem;
+            color: var(--accent);
+        }
+        
+        .features-list {
+            list-style: none;
+            text-align: right;
+            margin: 25px 0;
+            columns: 2;
+            column-gap: 40px;
+        }
+        
+        .features-list li {
+            padding: 10px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            break-inside: avoid;
+        }
+        
+        .features-list li i {
+            color: var(--primary);
+            min-width: 25px;
+        }
+        
+        .buy-buttons-horizontal {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .buy-btn {
+            padding: 14px 30px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+            font-size: 1rem;
+            min-width: 220px;
+        }
+        
+        .btn-binance {
+            background-color: #F0B90B;
+            color: #000;
+        }
+        
+        .btn-binance:hover {
+            background-color: #E5A800;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(240, 185, 11, 0.3);
+        }
+        
+        .btn-m4u {
+            background-color: #2C3E50;
+            color: white;
+        }
+        
+        .btn-m4u:hover {
+            background-color: #1A252F;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(44, 62, 80, 0.3);
+        }
+        
+        .features {
+            padding: 80px 0;
+            background-color: var(--secondary);
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--primary);
+            font-size: 2.2rem;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 3px;
+            background-color: var(--primary);
+            bottom: 0;
+            right: 50%;
+            transform: translateX(50%);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            border-top: 4px solid var(--accent);
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            color: var(--light);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .addons {
+            padding: 60px 0;
+            background-color: var(--dark);
+        }
+        
+        .addon-card-single {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+            border: 2px solid var(--primary);
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .addon-card-single h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .addon-price {
+            color: var(--light);
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .addon-price span {
+            color: var(--accent);
+            font-size: 1rem;
+        }
+        
+        .contact-section {
+            padding: 60px 0;
+            background-color: var(--secondary);
+            text-align: center;
+        }
+        
+        .contact-methods {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .contact-method {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            width: 200px;
+            transition: all 0.3s;
+        }
+        
+        .contact-method:hover {
+            transform: translateY(-5px);
+            background-color: rgba(255, 215, 0, 0.05);
+        }
+        
+        .contact-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .contact-method h4 {
+            color: var(--light);
+            margin-bottom: 5px;
+        }
+        
+        .contact-link {
+            color: #DDD;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        
+        .contact-link:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+        
+        footer {
+            background-color: #000;
+            padding: 40px 0 20px;
+            text-align: center;
+            border-top: 2px solid var(--primary);
+        }
+        
+        .footer-logo {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+        }
+        
+        .copyright {
+            margin-top: 30px;
+            color: #888;
+            font-size: 0.9rem;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .logo {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .logo-text h1 {
+                font-size: 1.8rem;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .features-list {
+                columns: 1;
+            }
+            
+            .buy-buttons-horizontal {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .buy-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .contact-methods {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .contact-method {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-logo-section">
+                <img src="https://i.ibb.co/yFKQn0LB/c350e6a8a7a05bfbe351647c0421e266.jpg" alt="Velocity EA Logo" class="logo">
+                <div class="logo-text">
+                    <h1>Velocity EA</h1>
+                    <span>روبوت التداول عالي السرعة</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="hero">
+        <div class="container">
+            <h2>Velocity EA - روبوت التداول الذكي</h2>
+            <p>روبوت <span class="highlight">Velocity EA</span> هو روبوت تداول آلي عالية السرعة مخصص لتداول الذهب (<span class="highlight">XAU/USD</span>) مع إمكانية التداول على جميع الأزواج الأخرى. ابدأ رحلتك في التداول الآلي برأس مال يبدأ من <span class="highlight">10 دولار</span> فقط!</p>
+            
+            <div class="pricing">
+                <div class="price-card">
+                    <h3><i class="fas fa-robot"></i> Velocity EA - البوت الأساسي</h3>
+                    <div class="price">250 <span>دولار</span></div>
+                    
+                    <ul class="features-list">
+                        <li><i class="fas fa-bolt"></i> تداول عالي السرعة (HFT)</li>
+                        <li><i class="fas fa-gem"></i> متخصص في الذهب (XAU/USD)</li>
+                        <li><i class="fas fa-globe"></i> يدعم جميع أزواج العملات</li>
+                        <li><i class="fas fa-dollar-sign"></i> يبدأ برأس مال من 10 دولار</li>
+                        <li><i class="fas fa-cogs"></i> قابل للتخصيص الكامل</li>
+                        <li><i class="fas fa-shield-alt"></i> نظام حماية متقدم</li>
+                        <li><i class="fas fa-file-code"></i> ملف إضافي مجاني مع الشراء</li>
+                        <li><i class="fas fa-headset"></i> دعم فني لمدة 6 أشهر</li>
+                    </ul>
+                    
+                    <div class="buy-buttons-horizontal">
+                        <a href="https://app.binance.com/uni-qr/C6gYX266" target="_blank" class="buy-btn btn-binance">
+                            <i class="fas fa-shopping-cart"></i> شراء عبر Binance Pay
+                        </a>
+                        <a href="https://t.me/VelocityEA_Support" target="_blank" class="buy-btn btn-m4u">
+                            <i class="fas fa-cloud-download-alt"></i> شراء عبر الوسيط 
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="addons">
+        <div class="container">
+            <h2 class="section-title">ملف إضافي مميز</h2>
+            
+            <div class="addon-card-single">
+                <h4><i class="fas fa-rocket"></i> ملف Velocity Pro+</h4>
+                <p>تحسين شامل لأداء الروبوت مع إضافة استراتيجيات تداول متقدمة، نظام إدارة أحجام متطور، وحماية متقدمة من السحب الحاد.</p>
+                <div class="addon-price">50 <span>دولار</span></div>
+                <div class="buy-buttons-horizontal">
+                    <a href="https://app.binance.com/uni-qr/C6gYX266" target="_blank" class="buy-btn btn-binance" style="min-width: 200px; padding: 12px 25px;">
+                        <i class="fas fa-shopping-cart"></i> شراء الملف الإضافي
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">لماذا تختار Velocity EA؟</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h3>أداء متفوق</h3>
+                    <p>محرك تداول سريع ومتين تم تطويره لتحقيق أفضل النتائج في أسواق الذهب والعملات</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-cog"></i>
+                    </div>
+                    <h3>سهولة الاستخدام</h3>
+                    <p>واجهة سهلة الإعداد والتشغيل مع دليل تفصيلي ودعم فني متواصل</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>نتائج مثبتة</h3>
+                    <p>اداء ثابت ونتائج قويه وتحكم كامل</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-section">
+        <div class="container">
+            <h2 class="section-title">تواصل معنا</h2>
+            <p style="text-align: center; margin-bottom: 30px; color: #CCC; max-width: 700px; margin-right: auto; margin-left: auto;">نحن هنا للإجابة على جميع استفساراتك وتقديم الدعم الفني اللازم</p>
+            
+            <div class="contact-methods">
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fab fa-telegram"></i>
+                    </div>
+                    <h4>تيليجرام</h4>
+                    <a href="https://t.me/VelocityEA_Support" target="_blank" class="contact-link">@VelocityEA_Support</a>
+                </div>
+                
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h4>البريد الإلكتروني</h4>
+                    <a href="mailto:velocity.ea.hft@gmail.com" class="contact-link">velocity.ea.hft@gmail.com</a>
+                </div>
+                
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <h4>واتساب</h4>
+                    <a href="https://wa.me/qr/UACYWVOLQBFVO1" target="_blank" class="contact-link">+44 7376166758</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <img src="https://i.ibb.co/yFKQn0LB/c350e6a8a7a05bfbe351647c0421e266.jpg" alt="Velocity EA Logo" class="footer-logo">
+            <h2 style="color: var(--primary); margin-bottom: 10px;">Velocity EA</h2>
+            <p style="color: #CCC; margin-bottom: 20px; max-width: 600px; margin-left: auto; margin-right: auto;">روبوت التداول عالي السرعة المتخصص في الذهب والأزواج المالية الأخرى</p>
+            
+            <div class="buy-buttons-horizontal" style="max-width: 500px; margin: 30px auto;">
+                <a href="https://app.binance.com/uni-qr/C6gYX266" target="_blank" class="buy-btn btn-binance">
+                    <i class="fas fa-shopping-cart"></i> شراء عبر Binance Pay
+                </a>
+                <a href="https://t.me/VelocityEA_Support" target="_blank" class="buy-btn btn-m4u">
+                    <i class="fas fa-cloud-download-alt"></i> شراء عبر الوسيط 
+                </a>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2026 Velocity EA. جميع الحقوق محفوظة.
+                <br>
+                <small>التداول في الأسواق المالية يحمل مخاطر. ننصح باختبار الروبوت على حساب تجريبي أولاً.</small>
+            </div>
+        </div>
+    </footer>
+
+ <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // تأثيرات الظهور للبطاقات
+            const cards = document.querySelectorAll('.price-card, .feature-card, .addon-card-single, .contact-method');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(card);
+            });
+            
+            // تنبيه للروابط الناقصة (إذا لم يتم إضافة رابط بينانس حقيقي)
+            const binanceLinks = document.querySelectorAll('a[href="https://app.binance.com/uni-qr/C6gYX266"]');
+            binanceLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if(this.href === "https://binance.com/pay") {
+                        
+                        if(confirm('هذا رابط عام لـ Binance Pay. هل تريد المتابعة إلى الموقع العام؟')) {
+                            return true;
+                        } else {
+                            e.preventDefault();
+                            alert('يمكنك استبدال هذا الرابط برابط الدفع الفعلي الخاص بك');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
